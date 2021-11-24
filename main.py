@@ -1,31 +1,19 @@
 from pathlib import Path
 import shutil
+from utils import read_json
+from DATA import DATA_DIR
+
 
 class OrganizeDir:
-    """Class to organize files in a directory. 
+    """Class to organize files in a directory.
 
     Example:
     >>> organizer = OrganizDir()
     >>> organizer.run(to_organize_directory)
     """
-    suffix_dir = {
-        '.png' : 'images',
-        '.jpg' : 'images',
-        '.jpeg' : 'images',
-        '.txt' : 'docs',
-        '.pdf' : 'docs',
-        '.csv' : 'docs',
-        '.zip' : 'compressed',
-        '.rar' : 'compressed',
-        '.py' : 'python',
-        '.ipynb' : 'python',
-        '.deb' : 'executable',
-        '.app' :'other',
-        '.dmg' : 'other',
-        '.pth' : 'other'
-    }
+    suffix_dir = read_json(DATA_DIR / 'suffix_dir.json')
 
-    def run(self, to_organize_dir: str):
+    def __call__(self, to_organize_dir: str):
         """Runs organizer job to move files to the specified destinations in suffix_dir.
 
         :param to_organize_dir: Directory to run organization job
@@ -60,8 +48,7 @@ class OrganizeDir:
                 shutil.move(str(path), str(DEST_DIR))
 
 if __name__ == '__main__':
-    # HOME_DIR = Path.home()
-    HOME_DIR = Path('/mnt/c/Users/siama/Downloads')
+    HOME_DIR = Path.home()
     organizer = OrganizeDir()
-    organizer.run(HOME_DIR)
+    organizer(HOME_DIR)
 
